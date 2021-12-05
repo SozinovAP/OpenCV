@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 		std::cerr << "Faces is not found!";
 		return -1;
 	}
-	auto face{ detectedFaces.front() };
+	Rect face{ detectedFaces.front() };
 	Mat faceImg{ image(face) };
 	if(showImage(faceImg, "Face") == -1)
 		return -1;
@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 	for (const auto& contour : contours)
 	{
 		Rect boundRect{ boundingRect(contour) };
-		if (boundRect.width >= 10 && boundRect.height >= 10)
+		if (boundRect.width >= 10 || boundRect.height >= 10)
 		{
 			newContours.push_back(contour);
 		}
@@ -85,18 +85,6 @@ int main(int argc, char** argv)
 	drawContours(removeEdges, newContours, -1, { 255, 255, 255 }, 1);
 	if(showImage(removeEdges, "Remove small edges") == -1)
 		return -1;
-
-	//Mat edgeLarge;
-	//Mat mask = Mat::zeros(binImg.size(), binImg.type());
-
-	//// drawContours(mask, newContours, -1
-	//drawContours(mask, newContours, 0, { 255, 255, 255 }, 1);
-	//bitwise_and(binImg, binImg, edgeLarge, mask);
-	//showImage(edgeLarge, "Remove");
-
-	//Mat res;
-	// bitwise_and(binImg, binImg, edgeLarge, mask);
-	// showImage(edgeLarge, "Remove");
 
 	// step 5 - morphological operation
 	Mat structElem{ getStructuringElement(cv::MORPH_RECT, { 5,5 }) };
